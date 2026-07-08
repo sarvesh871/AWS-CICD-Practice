@@ -1,7 +1,34 @@
-import os
+import paramiko
 
-print("Starting Deployment")
+HOST="YOUR_EC2_PUBLIC_IP"
 
-os.system("python app.py")
+USERNAME="ec2-user"
 
-print("Deployment Successful")
+KEY="aws-key.pem"
+
+client=paramiko.SSHClient()
+
+client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+client.connect(
+hostname=HOST,
+username=USERNAME,
+key_filename=KEY
+)
+
+commands=[
+  "cd /home/ec2-user/project",
+  "git pull",
+  "python3 [app.py](http://app.py)"
+]
+
+for command in commands:
+```
+stdin,stdout,stderr=client.exec_command(command)
+
+print(stdout.read().decode())
+```
+
+client.close()
+
+print("Deployment Completed")
